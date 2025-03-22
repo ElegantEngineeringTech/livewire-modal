@@ -1,12 +1,12 @@
 {
-    "name": "elegantengineeringtech/livewire-modal",
+    "name": "elegantly/livewire-modal",
     "description": "Modal for your Livewire App. Done right.",
     "keywords": [
         "elegantly",
         "laravel",
         "livewire-modal"
     ],
-    "homepage": "https://github.com/elegantengineeringtech/livewire-modal",
+    "homepage": "https://github.com/ElegantEngineeringTech/livewire-modal",
     "license": "MIT",
     "authors": [
         {
