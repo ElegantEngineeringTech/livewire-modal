@@ -1,12 +1,14 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+declare(strict_types=1);
+
+namespace Elegantly\LivewireModal\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LivewireModalCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'livewire-modal';
 
     public $description = 'My command';
 
