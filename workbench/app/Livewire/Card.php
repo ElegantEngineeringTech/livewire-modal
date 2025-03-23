@@ -8,11 +8,11 @@ use Livewire\Component;
 
 class Card extends Component
 {
-    public ?string $title = null;
+    public string $position = 'center';
 
     public function render()
     {
-        sleep(1);
+        usleep(250_000);
 
         return view('livewire.card');
     }

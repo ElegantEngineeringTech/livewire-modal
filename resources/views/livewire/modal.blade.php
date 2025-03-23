@@ -1,8 +1,8 @@
 <div x-data="{
-    open: $wire.entangle('open', false),
-    components: $wire.entangle('components', false),
-    stack: [],
-    get active() {
+    modalOpen: $wire.entangle('open', false),
+    components: $wire.entangle('components', false), // Array of loaded components
+    stack: [], // Array or component Ids to display
+    get modalActiveId() {
         if (this.stack.length) {
             return this.stack[this.stack.length - 1];
         }
@@ -10,7 +10,7 @@
         return null;
     },
     get activeComponent() {
-        return this.components.find((item) => item.id === this.active);
+        return this.components.find((item) => item.id === this.modalActiveId);
     },
     get lastComponent() {
         if (this.components.length) {
@@ -18,102 +18,117 @@
         }
         return null;
     },
-    generateRandomId() {
-        return Math.random().toString(36).substring(2, 7);
+    areComponentsEqual({ component: component1, props: props1, params: params1 }, { component: component2, props: props2, params: params2 }) {
+        return component1 === component2 &&
+            JSON.stringify(props1) === JSON.stringify(props2) &&
+            JSON.stringify(params1) === JSON.stringify(params2);
+    },
+    findStackIndex(id, reverse = false) {
+        if (reverse) {
+            return this.stack.length - 1 - this.findStackIndex(id);
+        }
+
+        return this.stack.findIndex((item) => id === item);
     },
     sync() {
         this.$wire.$refresh();
     },
-    removeComponentById(id) {
-        this.stack = this.stack.filter((item) => item !== id);
-        this.components = this.components.filter((item) => item.id !== id);
+    generateRandomId() {
+        return Math.random().toString(36).substring(2, 7);
     },
     makeComponentFromEvent(event) {
         const component = event.detail?.component ?? null;
         const props = event.detail?.props ?? [];
         const params = event.detail?.params ?? [];
 
-        if (component) {
-            return {
-                component: component,
-                props: props,
-                params: params,
-            };
-        }
-
-        return null;
+        return {
+            component: component,
+            props: props,
+            params: params,
+        };
     },
-    addComponentFromEvent(event) {
-        const component = this.makeComponentFromEvent(event);
-
-        if (component) {
-            component.id = this.generateRandomId();
-
-            this.components.push(component);
-
-            return component;
-        }
-
-        return null;
-    },
-    getPreloadedComponent(component) {
-        if (this.lastComponent.component === component.component) {
+    getPreloadedComponent(eventComponent) {
+        if (
+            eventComponent &&
+            this.lastComponent &&
+            this.lastComponent.preloaded &&
+            this.areComponentsEqual(eventComponent, this.lastComponent)
+        ) {
             return this.lastComponent;
         }
 
         return null;
     },
     onPreload(event) {
-        this.addComponentFromEvent(event);
+        const eventComponent = this.makeComponentFromEvent(event);
+
+        const preloadedComponent = this.getPreloadedComponent(eventComponent);
+
+        if (preloadedComponent) {
+            return;
+        }
+
+        eventComponent.id = this.generateRandomId();
+        eventComponent.preloaded = true;
+
+        this.components.push(eventComponent);
 
         this.sync();
+    },
+    openNewComponent(eventComponent) {
+        eventComponent.id = this.generateRandomId();
+        this.components.push(eventComponent);
+        this.stack.push(eventComponent.id);
+
+        this.modalOpen = true;
+        this.sync();
+    },
+    openPreloadedComponent(component) {
+        component.preloaded = false;
+
+        this.stack.push(component.id);
+        this.modalOpen = true;
     },
     onOpen(event) {
         const eventComponent = this.makeComponentFromEvent(event);
 
-        if (!eventComponent) {
-            return null;
-        }
+        const preloadedComponent = this.getPreloadedComponent(eventComponent);
 
-        const preloaded = this.getPreloadedComponent(eventComponent);
-
-        if (preloaded) {
-
-            this.stack.push(preloaded.id);
-            this.open = true;
-
+        if (preloadedComponent) {
+            this.openPreloadedComponent(preloadedComponent);
         } else {
-            const component = this.addComponentFromEvent(event);
-
-            if (component) {
-                this.stack.push(component.id);
-                this.open = true;
-                this.sync();
-            }
+            this.openNewComponent(eventComponent);
         }
 
     },
-    removeComponent(component) {
+    findComponentById(id) {
+        return this.components.find((item) => item.id === id);
+    },
+    removeComponentById(id) {
+        this.stack = this.stack.filter((item) => item !== id);
+        this.components = this.components.filter((item) => item.id !== id);
+    },
+    removeComponent(eventComponent) {
         this.components
-            .filter((item) => item.component === component)
+            .filter((item) => item.component === eventComponent.component)
             .forEach((item) => this.removeComponentById(item.id));
     },
     removeActiveComponent() {
-        if (this.active) {
-            this.removeComponentById(this.active);
+        if (this.modalActiveId) {
+            this.removeComponentById(this.modalActiveId);
         }
     },
     onClose(event) {
-        const component = this.makeComponentFromEvent(event);
+        const eventComponent = this.makeComponentFromEvent(event);
 
-        if (component) {
-            this.removeComponent(component);
+        if (eventComponent.component) {
+            this.removeComponent(eventComponent);
         } else {
             this.removeActiveComponent();
         }
 
-        if (this.components.length < 1) {
-            this.open = false;
+        if (this.stack.length < 1) {
+            this.modalOpen = false;
         }
 
         this.sync();
@@ -121,11 +136,11 @@
     onCloseAll() {
         this.stack = [];
         this.components = [];
-        this.open = false;
+        this.modalOpen = false;
         this.sync();
     },
     init() {
-        this.$watch('open', (value) => {
+        this.$watch('modalOpen', (value) => {
             if (value) {
                 window.document.body.style.top = `-${window.scrollY}px`;
                 window.document.body.style.width = '100%';
@@ -140,18 +155,63 @@
 
             }
         });
-
     },
-}" style="display: none;" x-show="open" x-trap="open" x-on:modal-open.window="onOpen"
+}" x-show="modalOpen" x-trap="modalOpen" x-on:modal-open.window="onOpen"
     x-on:modal-preload.window="onPreload" x-on:modal-close.window="onClose" x-on:modal-close-all.window="onCloseAll"
     x-on:mousedown.self="onClose" x-on:keyup.escape.prevent.stop="onClose" x-transition.opacity.duration.250ms
-    class="fixed left-0 top-0 z-40 flex h-dvh w-full flex-col overflow-hidden bg-black/50" tabindex="0">
+    class="fixed left-0 top-0 z-40 grid h-dvh w-full select-none overflow-hidden bg-black/30" tabindex="0"
+    style="
+        display: none;
+        grid-template-areas: 'stack';
+    ">
 
-    @foreach ($components as ['id' => $id, 'component' => $component, 'props' => $props])
-        <div wire:key="{{ $this->getId() }}.components.{{ $id }}" class="contents"
-            x-show="active === '{{ $id }}'">
-            @livewire($component, $props, key("{$this->getId()}.components.{$id}.component"))
+    @foreach ($components as $item)
+        @php
+            ['id' => $id, 'component' => $componentName, 'props' => $props, 'params' => $params] = $item;
+        @endphp
+        <div x-data="{
+            get modalId() {
+                return '{{ $id }}';
+            },
+            get modalMode() {
+                const activeMode = activeComponent?.params.mode ?? null;
+                const componentMode = findComponentById(this.modalId)?.params.mode ?? null;
+        
+                if (activeComponent && activeMode === null) {
+                    return null;
+                }
+        
+                return componentMode;
+            },
+            get modalIndexReversed() {
+                return findStackIndex(this.modalId, true);
+            },
+            modalWrapper: {
+                ['x-bind:class']() {
+                    if (this.modalMode === 'stack') {
+                        return 'relative flex size-full pointer-events-none [&>*]:pointer-events-auto';
+                    }
+                    return 'contents';
+                },
+                ['x-bind:style']() {
+                    return `grid-area: stack;`;
+                },
+                ['x-bind:inert']() {
+                    return modalActiveId !== this.modalId;
+                },
+                ['x-show']() {
+                    if (this.modalMode === 'stack') {
+                        return stack.includes(this.modalId);
+                    }
+                    return modalActiveId === this.modalId;
+                },
+            },
+        }" x-bind="modalWrapper" class="select-text"
+            wire:key="{{ $this->getId() }}.components.{{ $id }}">
+            @livewire($componentName, $props, key("{$this->getId()}.components.{$id}.component"))
         </div>
     @endforeach
+
+    @include('livewire-modal::directive')
 
 </div>

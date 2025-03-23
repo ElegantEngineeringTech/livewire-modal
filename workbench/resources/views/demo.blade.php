@@ -15,77 +15,113 @@
     </style>
 </head>
 
-<body class="flex h-dvh">
+<body class="" x-data>
+    <div class="grid grid-cols-1 divide-x md:grid-cols-3 [&>*]:h-60">
 
-    <div class="m-auto flex gap-2" x-data>
-        <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm active:shadow-none"
-            x-modal:open.preload="{ component: 'card', props: { title: 'Hello' } }" x-on:mouseenter="console.log('on')">
-            Open Modal Preloaded
-        </button>
-        <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm active:shadow-none"
-            x-on:click="Livewire.dispatch('modal-open', { component: 'card', props: { title: 'Hello' } })">
-            Open Modal
-        </button>
-        <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm active:shadow-none"
-            x-on:click="Livewire.dispatch('modal-open', { component: 'slideover' })">
-            Open Slideover
-        </button>
+        <div class="isolate flex flex-col">
+            <div class="p-3">
+                <h1 class="font-semibold">Simple Modal</h1>
+            </div>
+            <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card' }">
+                    Open Modal
+                </button>
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', props: { position: 'left' } }">
+                    Open Left
+                </button>
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', props: { position: 'right' } }">
+                    Open Right
+                </button>
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', props: { position: 'bottom' } }">
+                    Open Bottom
+                </button>
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', props: { position: 'top' } }">
+                    Open Top
+                </button>
+
+            </div>
+        </div>
+
+        <div class="isolate flex flex-col">
+            <div class="p-3">
+                <h1 class="font-semibold">Preloaded Modal</h1>
+            </div>
+            <div class="flex grow items-center justify-center border-b">
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open.preload="{ component: 'card' }">
+                    Open Preloaded Modal
+                </button>
+
+            </div>
+        </div>
+
+        <div class="isolate flex flex-col">
+            <div class="p-3">
+                <h1 class="font-semibold">Stacked Modal</h1>
+            </div>
+            <div class="flex grow items-center justify-center border-b">
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', params:{ mode: 'stack' } }">
+                    Open Stacked Modal
+                </button>
+
+            </div>
+        </div>
+
+        <div class="isolate flex flex-col">
+            <div class="p-3">
+                <h1 class="font-semibold">Simple Slideover</h1>
+            </div>
+            <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'slideover' }">
+                    Open Slideover
+                </button>
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'slideover', props: { position: 'left' } }">
+                    Open Left
+                </button>
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'slideover', props: { position: 'right' } }">
+                    Open Right
+                </button>
+
+            </div>
+        </div>
+
+        <div class="isolate flex flex-col">
+            <div class="p-3">
+                <h1 class="font-semibold">Stacked Slideover</h1>
+            </div>
+            <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'slideover', params:{ mode: 'stack' } }">
+                    Open Stacked Slideover
+                </button>
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'slideover', props:{ position: 'left' }, params:{ mode: 'stack' } }">
+                    Open Left
+                </button>
+
+            </div>
+        </div>
+
     </div>
 
     <livewire:modal />
-
-
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.directive('modal', (el, {
-                value,
-                modifiers,
-                expression
-            }, {
-                Alpine,
-                effect,
-                evaluate,
-                cleanup
-            }) => {
-                console.log(value, modifiers, expression);
-
-                if (value === 'open') {
-                    let preload = modifiers && modifiers.includes('preload');
-
-                    let params = evaluate(expression);
-
-                    let onClick = e => {
-                        e.preventDefault();
-
-                        Livewire.dispatch('modal-open', params);
-                    };
-
-                    let onMouseenter = e => {
-                        Livewire.dispatch('modal-preload', params);
-                    };
-
-                    el.addEventListener('click', onClick, {
-                        capture: true
-                    });
-
-                    if (preload) {
-                        el.addEventListener('mouseenter', onMouseenter, {
-                            capture: true
-                        });
-                    }
-
-                    cleanup(() => {
-                        el.removeEventListener('click', onClick);
-                        el.removeEventListener('mouseenter', onMouseenter);
-                    });
-
-                } else if (value === 'close') {
-                    // 
-                }
-
-            });
-        });
-    </script>
 </body>
 
 </html>

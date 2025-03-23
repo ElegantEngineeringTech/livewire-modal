@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-// config for Elegantly/LivewireModal
 return [
 
+    'modes' => [
+        'stack' => 'livewire-modal::wrappers.stack',
+        'sequence' => 'livewire-modal::wrappers.sequence',
+    ],
 ];

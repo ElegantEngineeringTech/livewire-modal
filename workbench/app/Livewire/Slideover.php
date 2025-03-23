@@ -8,9 +8,11 @@ use Livewire\Component;
 
 class Slideover extends Component
 {
+    public string $position = 'right';
+
     public function render()
     {
-        sleep(1);
+        usleep(250_000);
 
         return view('livewire.slideover');
     }
