@@ -71,7 +71,7 @@
             <div class="flex grow items-center justify-center border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', params:{ mode: 'stack' } }">
+                    x-modal:open="{ component: 'card', stack: 'card' }">
                     Open Stacked Modal
                 </button>
 
@@ -107,12 +107,12 @@
             <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'slideover', params:{ mode: 'stack' } }">
+                    x-modal:open="{ component: 'slideover', stack: 'slideover'}">
                     Open Stacked Slideover
                 </button>
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'slideover', props:{ position: 'left' }, params:{ mode: 'stack' } }">
+                    x-modal:open="{ component: 'slideover', props:{ position: 'left' }, stack: 'slideover-left' }">
                     Open Left
                 </button>
 

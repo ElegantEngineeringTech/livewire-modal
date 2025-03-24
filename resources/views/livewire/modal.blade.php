@@ -1,34 +1,30 @@
 <div x-data="{
     modalOpen: $wire.entangle('open', false),
     components: $wire.entangle('components', false), // Array of loaded components
-    stack: [], // Array or component Ids to display
+    modalHistory: [], // Array or component Ids to display
     get modalActiveId() {
-        if (this.stack.length) {
-            return this.stack[this.stack.length - 1];
-        }
-
-        return null;
+        return this.modalHistory.length ? this.modalHistory[this.modalHistory.length - 1] : null;
     },
     get activeComponent() {
         return this.components.find((item) => item.id === this.modalActiveId);
     },
+    get activeStack() {
+        return this.activeComponent?.stack ?? null;
+    },
     get lastComponent() {
-        if (this.components.length) {
-            return this.components[this.components.length - 1];
-        }
-        return null;
+        return this.components.length ? this.components[this.components.length - 1] : null;
     },
     areComponentsEqual({ component: component1, props: props1, params: params1 }, { component: component2, props: props2, params: params2 }) {
         return component1 === component2 &&
             JSON.stringify(props1) === JSON.stringify(props2) &&
             JSON.stringify(params1) === JSON.stringify(params2);
     },
-    findStackIndex(id, reverse = false) {
+    findHistoryIndex(id, reverse = false) {
         if (reverse) {
-            return this.stack.length - 1 - this.findStackIndex(id);
+            return this.modalHistory.length - 1 - this.findHistoryIndex(id);
         }
 
-        return this.stack.findIndex((item) => id === item);
+        return this.modalHistory.findIndex((item) => id === item);
     },
     sync() {
         this.$wire.$refresh();
@@ -37,14 +33,11 @@
         return Math.random().toString(36).substring(2, 7);
     },
     makeComponentFromEvent(event) {
-        const component = event.detail?.component ?? null;
-        const props = event.detail?.props ?? [];
-        const params = event.detail?.params ?? [];
-
         return {
-            component: component,
-            props: props,
-            params: params,
+            component: event.detail?.component ?? null,
+            props: event.detail?.props ?? [],
+            params: event.detail?.params ?? [],
+            stack: event.detail?.stack ?? this.$wire.stack,
         };
     },
     getPreloadedComponent(eventComponent) {
@@ -77,8 +70,9 @@
     },
     openNewComponent(eventComponent) {
         eventComponent.id = this.generateRandomId();
+
         this.components.push(eventComponent);
-        this.stack.push(eventComponent.id);
+        this.modalHistory.push(eventComponent.id);
 
         this.modalOpen = true;
         this.sync();
@@ -86,12 +80,11 @@
     openPreloadedComponent(component) {
         component.preloaded = false;
 
-        this.stack.push(component.id);
+        this.modalHistory.push(component.id);
         this.modalOpen = true;
     },
     onOpen(event) {
         const eventComponent = this.makeComponentFromEvent(event);
-
         const preloadedComponent = this.getPreloadedComponent(eventComponent);
 
         if (preloadedComponent) {
@@ -99,13 +92,12 @@
         } else {
             this.openNewComponent(eventComponent);
         }
-
     },
     findComponentById(id) {
         return this.components.find((item) => item.id === id);
     },
     removeComponentById(id) {
-        this.stack = this.stack.filter((item) => item !== id);
+        this.modalHistory = this.modalHistory.filter((item) => item !== id);
         this.components = this.components.filter((item) => item.id !== id);
     },
     removeComponent(eventComponent) {
@@ -114,9 +106,7 @@
             .forEach((item) => this.removeComponentById(item.id));
     },
     removeActiveComponent() {
-        if (this.modalActiveId) {
-            this.removeComponentById(this.modalActiveId);
-        }
+        this.modalActiveId && this.removeComponentById(this.modalActiveId);
     },
     onClose(event) {
         const eventComponent = this.makeComponentFromEvent(event);
@@ -127,14 +117,12 @@
             this.removeActiveComponent();
         }
 
-        if (this.stack.length < 1) {
-            this.modalOpen = false;
-        }
+        this.modalOpen = this.modalHistory.length > 0;
 
         this.sync();
     },
     onCloseAll() {
-        this.stack = [];
+        this.modalHistory = [];
         this.components = [];
         this.modalOpen = false;
         this.sync();
@@ -173,22 +161,21 @@
             get modalId() {
                 return '{{ $id }}';
             },
-            get modalMode() {
-                const activeMode = activeComponent?.params.mode ?? null;
-                const componentMode = findComponentById(this.modalId)?.params.mode ?? null;
+            get isModalActive() {
+                return modalActiveId === this.modalId;
+            },
+            get isModalStacked() {
+                const component = findComponentById(this.modalId);
+                const componentStack = component?.stack ?? null;
         
-                if (activeComponent && activeMode === null) {
-                    return null;
-                }
-        
-                return componentMode;
+                return activeStack && activeStack === componentStack;
             },
             get modalIndexReversed() {
-                return findStackIndex(this.modalId, true);
+                return findHistoryIndex(this.modalId, true);
             },
             modalWrapper: {
                 ['x-bind:class']() {
-                    if (this.modalMode === 'stack') {
+                    if (this.isModalStacked) {
                         return 'relative flex size-full pointer-events-none [&>*]:pointer-events-auto';
                     }
                     return 'contents';
@@ -197,13 +184,13 @@
                     return `grid-area: stack;`;
                 },
                 ['x-bind:inert']() {
-                    return modalActiveId !== this.modalId;
+                    return !this.isModalActive;
                 },
                 ['x-show']() {
-                    if (this.modalMode === 'stack') {
-                        return stack.includes(this.modalId);
+                    if (this.isModalStacked) {
+                        return modalHistory.includes(this.modalId);
                     }
-                    return modalActiveId === this.modalId;
+                    return this.isModalActive;
                 },
             },
         }" x-bind="modalWrapper" class="select-text"

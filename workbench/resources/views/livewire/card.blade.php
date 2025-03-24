@@ -20,12 +20,12 @@
         </button>
 
         <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-            x-modal:open="{ component: 'card', params:{ mode: 'stack' } }">
+            x-modal:open="{ component: 'card', stack: 'card' }">
             Open Stacked Modal
         </button>
 
         <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-            x-modal:open="{ component: 'slideover', params:{ mode: 'stack' } }">
+            x-modal:open="{ component: 'slideover', stack: 'slideover' }">
             Open Stacked Slideover
         </button>
     </div>

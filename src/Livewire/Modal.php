@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Elegantly\LivewireModal\Livewire;
 
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 class Modal extends Component
 {
-    public ?string $mode = null;
+    #[Locked]
+    public ?string $stack = null;
 
     public bool $open = false;
 
