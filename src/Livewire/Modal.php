@@ -19,6 +19,15 @@ class Modal extends Component
      */
     public array $components = [];
 
+    public function mount(null|string|bool $stack = null): void
+    {
+        if (is_bool($stack)) {
+            $this->stack = $stack ? 'default' : null;
+        } else {
+            $this->stack = $stack;
+        }
+    }
+
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire-modal::livewire.modal');

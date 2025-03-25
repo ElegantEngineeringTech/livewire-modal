@@ -26,7 +26,7 @@
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
                     x-modal:open="{ component: 'card' }">
-                    Open Modal
+                    Open
                 </button>
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
                     x-modal:open="{ component: 'card', props: { position: 'left' } }">
@@ -68,11 +68,29 @@
             <div class="p-3">
                 <h1 class="font-semibold">Stacked Modal</h1>
             </div>
-            <div class="flex grow items-center justify-center border-b">
+            <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', stack: 'card' }">
-                    Open Stacked Modal
+                    x-modal:open="{ component: 'card', stack: 'card', }">
+                    Open
+                </button>
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'left' } }">
+                    Open Left
+                </button>
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'right' } }">
+                    Open Right
+                </button>
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'bottom' } }">
+                    Open Bottom
+                </button>
+
+                <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'top' } }">
+                    Open Top
                 </button>
 
             </div>

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Elegantly\LivewireModal;
 
-use Elegantly\LivewireModal\Commands\LivewireModalCommand;
 use Elegantly\LivewireModal\Livewire\Modal;
 use Illuminate\Contracts\Foundation\Application;
 use Livewire\LivewireManager;
@@ -22,9 +21,7 @@ class LivewireModalServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('livewire-modal')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasCommand(LivewireModalCommand::class);
+            ->hasViews();
     }
 
     public function bootingPackage(): void

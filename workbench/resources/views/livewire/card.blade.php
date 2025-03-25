@@ -1,4 +1,4 @@
-<x-livewire-modal::modal class="flex size-96 flex-col rounded-md border bg-white" :position="$position">
+<x-livewire-modal::modal class="flex size-96 flex-col overflow-auto rounded-md border bg-white" :position="$position">
     <div class="p-5">
         <p>
             Modal ID: <span x-text="modalId"></span>
@@ -20,13 +20,33 @@
         </button>
 
         <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-            x-modal:open="{ component: 'card', stack: 'card' }">
-            Open Stacked Modal
+            x-modal:open="{ component: 'slideover', stack: 'slideover' }">
+            Open Stacked Slideover
+        </button>
+    </div>
+
+    <div class="flex flex-col gap-2 p-5">
+        <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+            x-modal:open="{ component: 'card', stack: 'card', }">
+            Open Stacked
+        </button>
+        <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+            x-modal:open="{ component: 'card', stack: 'card', props: { position: 'left' } }">
+            Open Stacked Left
+        </button>
+        <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+            x-modal:open="{ component: 'card', stack: 'card', props: { position: 'right' } }">
+            Open Stacked Right
         </button>
 
         <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-            x-modal:open="{ component: 'slideover', stack: 'slideover' }">
-            Open Stacked Slideover
+            x-modal:open="{ component: 'card', stack: 'card', props: { position: 'bottom' } }">
+            Open Stacked Bottom
+        </button>
+
+        <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
+            x-modal:open="{ component: 'card', stack: 'card', props: { position: 'top' } }">
+            Open Stacked Top
         </button>
     </div>
 </x-livewire-modal::modal>

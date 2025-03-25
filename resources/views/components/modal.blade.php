@@ -4,7 +4,7 @@
 ])
 
 <div {!! $attributes->class([
-    'max-w-full transition',
+    'max-w-full min-w-0 transition',
     'max-h-[calc(100%-3rem)]' => !$fullscreen,
     match ($position) {
         'center' => 'm-auto origin-top',
@@ -18,23 +18,6 @@
         'bottom-right' => 'mt-auto ml-auto',
         default => '',
     },
-]) !!}
-    x-bind:style="{
-        '--index': modalIndexReversed,
-        '--direction': {{ match ($position) {
-            'center' => -1,
-            'left' => 1,
-            'right' => -1,
-            default => 1,
-        } }},
-        transform: '{{ match ($position) {
-            'center' => 'scale(calc(1 - 0.05 * var(--index))) translateY(calc(var(--direction) * 1.5rem * var(--index)))',
-            'left',
-            'right'
-                => 'scale(calc(1 - 0.05 * var(--index))) translateX(calc(var(--direction) * 1.5rem * var(--index)))',
-            default => '',
-        } }}',
-        opacity: modalIndexReversed <= 2 ? 1 : 0,
-    }">
+]) !!}>
     {{ $slot }}
 </div>
