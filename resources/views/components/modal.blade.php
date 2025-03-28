@@ -1,11 +1,9 @@
 @props([
     'position' => 'center',
-    'fullscreen' => false,
 ])
 
 <div {!! $attributes->class([
     'max-w-full min-w-0 transition',
-    'max-h-[calc(100%-3rem)]' => !$fullscreen,
     match ($position) {
         'center' => 'm-auto origin-top',
         'left' => 'mr-auto my-auto',
@@ -18,6 +16,6 @@
         'bottom-right' => 'mt-auto ml-auto',
         default => '',
     },
-]) !!}>
+]) !!} x-bind="modalAttributes">
     {{ $slot }}
 </div>

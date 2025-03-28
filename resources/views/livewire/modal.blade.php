@@ -152,94 +152,16 @@
         grid-template-areas: 'stack';
     ">
 
-    @foreach ($components as $component)
-        @php
-            ['id' => $id, 'component' => $componentName, 'props' => $props, 'params' => $params] = $component;
-        @endphp
+    @foreach ($components as ['id' => $id, 'component' => $component, 'props' => $props])
         <div x-data="{
-            modalPosition: [null, null],
-            get modalId() {
-                return '{{ $component['id'] }}';
-            },
-            get isModalActive() {
-                return modalActiveId === this.modalId;
-            },
-            get modal() {
-                return findModalById(this.modalId);
-            },
-            get modalStack() {
-                return this.modal?.stack ?? null;
-            },
-            get isModalStacked() {
-                return modalActiveStack && modalActiveStack === this.modalStack;
-            },
-            get modalIndexReversed() {
-                return findModalHistoryIndex(this.modalId, true);
-            },
-            computeModalPosition() {
-                const parent = this.$el.getBoundingClientRect();
-                const rect = this.$el.firstElementChild.getBoundingClientRect();
-        
-                const dx = parent.width - rect.right;
-                const dy = parent.height - rect.bottom;
-        
-                const px = dx === rect.left ? 'center' : dx < rect.left ? 'right' : 'left';
-                const py = dy === rect.top ? 'center' : dy < rect.top ? 'bottom' : 'top';
-        
-                return [px, py];
-            },
-            get modalStackDirection() {
-                const [px, py] = this.modalPosition;
-        
-                const directions = {
-                    left: [1, 0],
-                    right: [-1, 0],
-                    top: [0, 1],
-                    bottom: [0, -1],
-                };
-        
-                return directions[px || py] || [0, -1];
-            },
-            init() {
-                this.$nextTick(() => {
-                    this.modalPosition = this.computeModalPosition();
-                });
-            },
-            modalWrapper: {
-                ['x-bind:inert']() {
-                    return !this.isModalActive;
-                },
-                ['x-show']() {
-                    if (this.isModalStacked) {
-                        return modalHistory.includes(this.modalId);
-                    }
-                    return this.isModalActive;
-                },
-                ['x-bind:style']() {
-                    let base = {
-                        'grid-area': 'stack'
-                    };
-        
-                    if (this.isModalStacked) {
-                        const [dx, dy] = this.modalStackDirection;
-        
-                        return {
-                            ...base,
-                            '--dx': dx,
-                            '--dy': dy,
-                            '--i': this.modalIndexReversed,
-                            transform: `scale(calc(1 - 0.05 * var(--i))) translate(calc(1rem * var(--dx) * var(--i)), calc(1rem * var(--dy) * var(--i)))`,
-                            opacity: this.modalIndexReversed <= 2 ? 1 : 0,
-                        };
-                    }
-        
-                    return base;
-                }
-            },
-        }" x-bind="modalWrapper"
-            class="pointer-events-none isolate flex size-full min-w-0 select-text transition [&>*]:pointer-events-auto"
-            wire:key="{{ $this->getId() }}.modalComponents.{{ $id }}">
-            @livewire($componentName, $props, key("{$this->getId()}.modalComponents.{$id}.component"))
+            get modalId() { return '{{ $id }}'; },
+            get isModalActive() { return modalActiveId === this.modalId; },
+            get modal() { return findModalById(this.modalId); },
+            get modalStack() { return this.modal?.stack ?? null; },
+            get isModalStacked() { return modalActiveStack && modalActiveStack === this.modalStack; },
+        }" class="min-w-0 select-text" style="grid-area: stack;" x-bind:id="modalId"
+            x-on:mousedown.self="onCloseModal" wire:key="{{ $this->getId() }}.modalComponents.{{ $id }}">
+            @livewire($component, $props, key("{$this->getId()}.modalComponents.{$id}.component"))
         </div>
     @endforeach
 
