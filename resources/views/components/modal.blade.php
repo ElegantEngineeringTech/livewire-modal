@@ -2,20 +2,20 @@
     'position' => 'center',
 ])
 
-<div {!! $attributes->class([
-    'max-w-full min-w-0 transition',
-    match ($position) {
-        'center' => 'm-auto origin-top',
-        'left' => 'mr-auto my-auto',
-        'right' => 'ml-auto my-auto',
-        'top' => 'mb-auto mx-auto',
-        'bottom' => 'mt-auto mx-auto',
-        'top-left' => 'mb-auto mr-auto',
-        'top-right' => 'mb-auto ml-auto',
-        'bottom-left' => 'mt-auto mr-auto',
-        'bottom-right' => 'mt-auto ml-auto',
-        default => '',
-    },
-]) !!} x-bind="modalAttributes">
+<div x-data="{
+    position: @js($position),
+}"
+    x-bind:class="{
+        'm-auto': position === 'center',
+        'mr-auto my-auto': position === 'left',
+        'ml-auto my-auto': position === 'right',
+        'mb-auto mx-auto': position === 'top',
+        'mt-auto mx-auto': position === 'bottom',
+        'mb-auto mr-auto': position === 'top-left',
+        'mb-auto ml-auto': position === 'top-right',
+        'mt-auto mr-auto': position === 'bottom-left',
+        'mt-auto ml-auto': position === 'bottom-right',
+    }"
+    x-bind="modalAttributes" {!! $attributes->class(['max-w-full min-w-0 transition']) !!}>
     {{ $slot }}
 </div>

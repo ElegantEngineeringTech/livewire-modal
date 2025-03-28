@@ -30,6 +30,7 @@ class Modal extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
+        // @phpstan-ignore-next-line
         return view('livewire-modal::livewire.modal');
     }
 }
