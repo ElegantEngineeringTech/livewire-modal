@@ -7,7 +7,7 @@
 
 This package allows you to seamlessly open Livewire components inside modals or slideovers with powerful features:
 
--   Support for modals, slideovers, or any similar UI pattern.
+-   Support for modals, slideovers, and similar UI patterns.
 -   Nested and stacked modals.
 -   Custom styling and animations, with optional presets.
 -   Preloading components for faster interactions.
@@ -19,11 +19,11 @@ This package allows you to seamlessly open Livewire components inside modals or 
 
 ## How It Works
 
-This package provides a single Livewire `Modal` component that you should place at the end of your `body` tag. This component dynamically renders and manages all modal instances, maintaining a modal history.
+This package provides a single Livewire `Modal` component that should be placed at the end of your `body` tag. This component dynamically renders and manages all modal instances while maintaining a modal history.
 
-You can open and close modals by dispatching `modal-open` and `modal-close` events.
+Modals can be opened and closed by dispatching `modal-open` and `modal-close` events.
 
-Any Livewire component can be used as a modal without requiring special interfaces or base components. Simply use your existing components as they are.
+Any Livewire component can be used as a modal without requiring special interfaces or base components—just use your existing components as they are.
 
 ## Installation
 
@@ -55,7 +55,7 @@ export default {
 
 ### Setting Up Your Application
 
-Add the modal manager component `<livewire:modal />` at the end of your `body` tag. This is typically done in your layout views:
+Add the modal manager component `<livewire:modal />` at the end of your `body` tag, typically in your layout views:
 
 ```html
 <body>
@@ -66,7 +66,7 @@ Add the modal manager component `<livewire:modal />` at the end of your `body` t
 
 ### Preparing Your Modals
 
-Any Livewire component can be displayed as a modal. However, certain features like stacking require additional customization.
+Any Livewire component can be displayed as a modal. However, certain features, such as stacking, require additional customization.
 
 #### Creating a Simple Modal Component
 
@@ -96,7 +96,7 @@ Wrap your content within these components:
 
 #### Controlling the Modal Position
 
-By default, modals are centered, but you can adjust their position using the `position` prop:
+By default, modals are centered, but their position can be adjusted using the `position` prop:
 
 ```html
 <x-livewire-modal::stack>
@@ -161,9 +161,9 @@ Livewire.dispatch("modal-open", {
 });
 ```
 
-### Preloading a modal
+### Preloading a Modal
 
-To open a modal, dispatch a `modal-preload` event with the same props you will use to open it:
+To preload a modal, dispatch a `modal-preload` event with the same props used to open it:
 
 ```js
 Livewire.dispatch("modal-preload", {
@@ -172,15 +172,15 @@ Livewire.dispatch("modal-preload", {
 });
 ```
 
-### Preloading a modal on hover
+### Preloading a Modal on Hover
 
-Using the custom Alpine directive, you can preload a modal when the user strat hovering a button for exemple, this will improve performance UX for the user as the modal will open quicker.
+Using the custom Alpine directive, you can preload a modal when the user starts hovering over a button. This improves UX by ensuring faster modal openings.
 
 ```html
 <button
     x-modal:open.preload="{ component: 'users.show', props: { userId: 1 } }"
 >
-    Preload and open
+    Preload and Open
 </button>
 ```
 
