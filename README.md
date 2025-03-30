@@ -140,6 +140,20 @@ To make a modal fullscreen, use the `fullscreen` prop:
 
 To open a modal, dispatch a `modal-open` event:
 
+```html
+<button x-modal:open="{ component: 'users.show', props: { userId: 1 } }">
+    Open
+</button>
+```
+
+```html
+<button
+    x-on:click="$dispatch('modal-open', { component: 'users.show', props: { userId: 1 } })"
+>
+    Open
+</button>
+```
+
 ```js
 Livewire.dispatch("modal-open", {
     component: "users.show",
@@ -147,9 +161,40 @@ Livewire.dispatch("modal-open", {
 });
 ```
 
+### Preloading a modal
+
+To open a modal, dispatch a `modal-preload` event with the same props you will use to open it:
+
+```js
+Livewire.dispatch("modal-preload", {
+    component: "users.show",
+    props: { userId: 1 },
+});
+```
+
+### Preloading a modal on hover
+
+Using the custom Alpine directive, you can preload a modal when the user strat hovering a button for exemple, this will improve performance UX for the user as the modal will open quicker.
+
+```html
+<button
+    x-modal:open.preload="{ component: 'users.show', props: { userId: 1 } }"
+>
+    Preload and open
+</button>
+```
+
 ### Closing the Current Modal
 
 To close the currently active modal, dispatch a `modal-close` event:
+
+```html
+<button x-modal:close>Close</button>
+```
+
+```html
+<button x-on:click="$dispatch('modal-close')">Close</button>
+```
 
 ```js
 Livewire.dispatch("modal-close");
@@ -160,7 +205,15 @@ Livewire.dispatch("modal-close");
 To close all modals at once:
 
 ```html
+<button x-modal:close-all>Close</button>
+```
+
+```html
 <button x-on:click="$dispatch('modal-close-all')">Close All</button>
+```
+
+```js
+Livewire.dispatch("modal-close-all");
 ```
 
 ## Testing
