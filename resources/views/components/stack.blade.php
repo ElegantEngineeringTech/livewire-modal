@@ -7,7 +7,6 @@
     'size-full min-w-0 flex pointer-events-none [&>*]:pointer-events-auto',
 ]) !!} x-data="{
     modalPosition: [null, null],
-    get modalIndexReversed() { return findModalHistoryIndex(modalId, true); },
     get modalStackDirection() {
         const [px, py] = this.modalPosition;
 
@@ -47,9 +46,9 @@
                 return {
                     '--dx': dx,
                     '--dy': dy,
-                    '--i': this.modalIndexReversed,
+                    '--i': modalIndexReversed,
                     transform: `scale(calc(1 - 0.05 * var(--i))) translate(calc(2rem * var(--dx) * var(--i)), calc(2rem * var(--dy) * var(--i)))`,
-                    opacity: this.modalIndexReversed <= 2 ? 1 : 0,
+                    opacity: modalIndexReversed <= 2 ? 1 : 0,
                 };
             }
 
