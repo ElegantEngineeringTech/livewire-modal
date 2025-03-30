@@ -157,8 +157,8 @@
             get modalId() { return '{{ $id }}'; },
             get isModalActive() { return modalActiveId === this.modalId; },
             get modal() { return findModalById(this.modalId); },
-            get modalIndex() { return findModalHistoryIndex(modalId); },
-            get modalIndexReversed() { return findModalHistoryIndex(modalId, true); },
+            get modalIndex() { return findModalHistoryIndex(this.modalId); },
+            get modalIndexReversed() { return findModalHistoryIndex(this.modalId, true); },
             get modalStack() { return this.modal?.stack ?? null; },
             get isModalStacked() { return modalActiveStack && modalActiveStack === this.modalStack; },
         }" class="flex size-full min-h-0 min-w-0 select-text" style="grid-area: stack;"
