@@ -5,18 +5,17 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/ElegantEngineeringTech/livewire-modal/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/ElegantEngineeringTech/livewire-modal/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/elegantly/livewire-modal.svg?style=flat-square)](https://packagist.org/packages/elegantly/livewire-modal)
 
-Modals can be tricky to implement, but this package makes it easy.
-
 With this package, you can effortlessly open Livewire components inside modals or slideovers, featuring:
 
 -   Support for modals, slideovers, or any similar UI pattern.
 -   Nested modals (one at a time).
+-   Stacked modals.
 -   Custom styling and animations, with optional presets.
--   Preloading functionality for faster user interactions.
+-   Preloading components for faster user interactions.
 
 ## Requirements
 
--   `livewire/livewire`: ^v3
+-   `livewire/livewire`: v3
 -   `tailwindcss`: v3 (not yet tested with v4)
 
 ## How It Works
@@ -57,7 +56,7 @@ export default {
 };
 ```
 
-### Setting Up Your Application
+### Preparing your App
 
 Add the modal manager component `<livewire:modal />` at the end of your `body` tag. This is usually done in your layout views:
 
@@ -68,17 +67,22 @@ Add the modal manager component `<livewire:modal />` at the end of your `body` t
 </body>
 ```
 
-### Opening a Modal
+### Preparing your Modals
 
-Any Livewire component can be displayed as a modal. However, this package does not enforce any default styling, so ensure that your components look good within a modal or slideover.
+Any Livewire component can be displayed as a modal, however, some features like stacking, requires you to customize your components.
+
+### Opening a Modal
 
 To open a modal, dispatch a `modal-open` event with the following parameters:
 
 -   `component`: The name of the Livewire component (required)
 -   `props`: An array of properties to pass to the component (optional)
+-   `stack`: A string identifying a specific stack, like `left` or `center` (optional)
 -   `params`: Additional parameters to store in the modal manager (optional)
 
-Example:
+You can disptach the events using three methods:
+
+Using Alpine `$distach` from inside an Alpine or Livewire component:
 
 ```html
 <button
@@ -89,12 +93,48 @@ Example:
 </button>
 ```
 
+Using the custom Alpine directive from inside an Alpine or Livewire component:
+
+```html
+<button
+    type="button"
+    x-modal:open="{ component: 'users.show', props: { userId: 1 } }"
+>
+    See User
+</button>
+```
+
+Using the Livewire global variable from outside a component:
+
+```js
+Livewire.dispatch("modal-open", {
+    component: "users.show",
+    props: { userId: 1 },
+});
+```
+
 ### Closing the Current Modal
 
 To close the currently active modal, dispatch a `modal-close` event. If there is a modal history, it will return to the previous modal; otherwise, all modals will close.
 
+You can disptach the events using three methods:
+
+Using Alpine `$distach` from inside an Alpine or Livewire component:
+
 ```html
-<button x-on:click="$dispatch('modal-close')">Close</button>
+<button type="button" x-on:click="$dispatch('modal-close')">Close</button>
+```
+
+Using the custom Alpine directive from inside an Alpine or Livewire component:
+
+```html
+<button type="button" x-modal:close>Close</button>
+```
+
+Using the Livewire global variable from outside a component:
+
+```js
+Livewire.dispatch("modal-close");
 ```
 
 ### Closing All Modals
