@@ -142,7 +142,7 @@
             }
         });
     },
-}" x-show="modalOpen" x-trap="modalOpen" x-on:modal-open.window="onOpenModal"
+}" x-show="modalOpen" x-on:modal-open.window="onOpenModal"
     x-on:modal-preload.window="onPreloadModal" x-on:modal-close.window="onCloseModal"
     x-on:modal-close-all.window="onCloseAllModal" x-on:mousedown.self="onCloseModal"
     x-on:keyup.escape.prevent.stop="onCloseModal" x-transition.opacity.duration.250ms
@@ -162,7 +162,7 @@
             get modalStack() { return this.modal?.stack ?? null; },
             get isModalStacked() { return modalActiveStack && modalActiveStack === this.modalStack; },
         }" class="flex size-full min-h-0 min-w-0 select-text" style="grid-area: stack;"
-            x-bind:id="modalId" x-on:mousedown.self="onCloseModal"
+            x-bind:id="modalId" x-on:mousedown.self="onCloseModal" x-trap="isModalActive"
             wire:key="{{ $this->getId() }}.modalComponents.{{ $id }}">
             @livewire($component, $props, key("{$this->getId()}.modalComponents.{$id}.component"))
         </div>
