@@ -159,8 +159,9 @@
             get modal() { return findModalById(this.modalId); },
             get modalStack() { return this.modal?.stack ?? null; },
             get isModalStacked() { return modalActiveStack && modalActiveStack === this.modalStack; },
-        }" class="min-w-0 select-text" style="grid-area: stack;" x-bind:id="modalId"
-            x-on:mousedown.self="onCloseModal" wire:key="{{ $this->getId() }}.modalComponents.{{ $id }}">
+        }" class="flex size-full min-h-0 min-w-0 select-text" style="grid-area: stack;"
+            x-bind:id="modalId" x-on:mousedown.self="onCloseModal"
+            wire:key="{{ $this->getId() }}.modalComponents.{{ $id }}">
             @livewire($component, $props, key("{$this->getId()}.modalComponents.{$id}.component"))
         </div>
     @endforeach
