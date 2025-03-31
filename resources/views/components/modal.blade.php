@@ -1,9 +1,11 @@
 @props([
     'position' => 'center',
+    'xData' => '',
 ])
 
 <div x-data="{
     position: @js($position),
+    {!! str($xData)->ltrim('{')->rtrim('}') !!}
 }"
     x-bind:class="{
         'm-auto': position === 'center',
