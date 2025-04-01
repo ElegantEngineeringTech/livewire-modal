@@ -146,7 +146,7 @@
     x-on:modal-preload.window="onPreloadModal" x-on:modal-close.window="onCloseModal"
     x-on:modal-close-all.window="onCloseAllModal" x-on:mousedown.self="onCloseModal"
     x-on:keyup.escape.prevent.stop="onCloseModal" x-transition.opacity.duration.250ms
-    class="fixed left-0 top-0 z-40 grid h-dvh w-full select-none overflow-hidden bg-black/30" tabindex="0"
+    class="fixed left-0 top-0 z-40 grid h-dvh w-full select-none overflow-hidden bg-black/30"
     style="
         display: none;
         grid-template-areas: 'stack';
@@ -162,7 +162,7 @@
             get modalStack() { return this.modal?.stack ?? null; },
             get isModalStacked() { return modalActiveStack && modalActiveStack === this.modalStack; },
         }" class="flex size-full min-h-0 min-w-0 select-text" style="grid-area: stack;"
-            x-bind:id="modalId" x-on:mousedown.self="onCloseModal" x-trap="isModalActive"
+            x-bind:id="modalId" x-on:mousedown.self="onCloseModal" x-trap="isModalActive" tabindex="0"
             wire:key="{{ $this->getId() }}.modalComponents.{{ $id }}">
             @livewire($component, $props, key("{$this->getId()}.modalComponents.{$id}.component"))
         </div>
