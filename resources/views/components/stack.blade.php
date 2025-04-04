@@ -1,4 +1,5 @@
 @props([
+    'direction' => null,
     'fullscreen' => false,
 ])
 
@@ -6,8 +7,9 @@
     'pt-20 sm:p-5' => !$fullscreen,
     'size-full min-w-0 flex pointer-events-none [&>*]:pointer-events-auto',
 ]) !!} x-data="{
+    modalDirection: {{ $direction ? Js::from($direction) : '[0, 0]' }},
     modalPosition: [null, null],
-    get modalStackDirection() {
+    computeModalDirection() {
         const [px, py] = this.modalPosition;
 
         const directions = {
@@ -32,16 +34,18 @@
         return [px, py];
     },
     init() {
-        this.$nextTick(() => {
+        @if (!$direction) this.$nextTick(() => {
             this.modalPosition = this.computeModalPosition();
-        });
+            this.modalDirection = this.computeModalDirection();
+        }); @endif
+
     },
     modalAttributes: {
         ['x-show']() { return isModalStacked ? modalHistory.includes(modalId) : isModalActive; },
         ['x-bind:inert']() { return !isModalActive },
         ['x-bind:style']() {
             if (isModalStacked) {
-                const [dx, dy] = this.modalStackDirection;
+                const [dx, dy] = this.modalDirection;
 
                 return {
                     '--dx': dx,
