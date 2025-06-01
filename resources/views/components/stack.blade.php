@@ -5,7 +5,7 @@
 
 <div {!! $attributes->class([
     'pt-20 sm:p-5' => !$fullscreen,
-    'size-full min-w-0 flex pointer-events-none *:pointer-events-auto',
+    'size-full min-w-0 flex pointer-events-none [&>*]:pointer-events-auto',
 ]) !!} x-data="{
     modalDirection: {{ Js::from($direction) }},
     modalPosition: [null, null],
