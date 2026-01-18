@@ -7,15 +7,15 @@
 
 This package allows you to seamlessly open Livewire components inside modals or slideovers with powerful features:
 
--   Support for modals, slideovers, and similar UI patterns.
--   Nested and stacked modals.
--   Custom styling and animations, with optional presets.
--   Preloading components for faster interactions.
+- Support for modals, slideovers, and similar UI patterns.
+- Nested and stacked modals.
+- Custom styling and animations, with optional presets.
+- Preloading components for faster interactions.
 
 ## Requirements
 
--   `livewire/livewire`: v3
--   `tailwindcss`: v3 (not yet tested with v4)
+- `livewire/livewire`: v4
+- `tailwindcss`: v3 (not yet tested with v4)
 
 ## How It Works
 
@@ -72,8 +72,8 @@ Any Livewire component can be displayed as a modal. However, certain features, s
 
 This package provides two Blade components to simplify stacking and positioning:
 
--   `x-livewire-modal::stack`: Provides a basic layout with stacking capabilities.
--   `x-livewire-modal::modal`: Handles positioning and stacking.
+- `x-livewire-modal::stack`: Provides a basic layout with stacking capabilities.
+- `x-livewire-modal::modal`: Handles positioning and stacking.
 
 Wrap your content within these components:
 
@@ -238,8 +238,8 @@ For information on reporting security vulnerabilities, please review [our securi
 
 ## Credits
 
--   [Quentin Gabriele](https://github.com/QuentinGab)
--   [All Contributors](../../contributors)
+- [Quentin Gabriele](https://github.com/QuentinGab)
+- [All Contributors](../../contributors)
 
 ## License
 
