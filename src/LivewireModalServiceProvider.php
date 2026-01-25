@@ -27,7 +27,10 @@ class LivewireModalServiceProvider extends PackageServiceProvider
     public function bootingPackage(): void
     {
         $this->callAfterResolving('livewire', function (LivewireManager $livewire, Application $app) {
-            $livewire->component('modal', Modal::class);
+            $livewire->addComponent(
+                name: 'modal',
+                class: Modal::class
+            );
         });
     }
 }
