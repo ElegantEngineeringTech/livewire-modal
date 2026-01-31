@@ -11,27 +11,27 @@
 
         <div class="flex flex-col gap-2 p-5">
             <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                x-modal:open="{ component: 'card' }">
+                x-modal:open="{ modal: 'card' }">
                 Open Modal
             </button>
 
             <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                x-modal:open="{ component: 'slideover' }">
+                x-modal:open="{ modal: 'slideover' }">
                 Open Slideover
             </button>
 
             <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                x-modal:open="{ component: 'card', stack: 'card' }">
+                x-modal:open="{ modal: 'card', stack: 'card' }">
                 Open Stacked Modal
             </button>
 
             <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                x-modal:open="{ component: 'slideover', stack: 'slideover' }">
+                x-modal:open="{ modal: 'slideover', stack: 'slideover' }">
                 Open Stacked Slideover
             </button>
 
             <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                x-modal:open="{ component: 'slideover', props:{ position: 'left' }, stack: 'slideover-left' }">
+                x-modal:open="{ modal: 'slideover', props:{ position: 'left' }, stack: 'slideover-left' }">
                 Open Stacked Slideover Left
             </button>
         </div>

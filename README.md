@@ -141,14 +141,14 @@ To make a modal fullscreen, use the `fullscreen` prop:
 To open a modal, dispatch a `modal-open` event:
 
 ```html
-<button x-modal:open="{ component: 'users.show', props: { userId: 1 } }">
+<button x-modal:open="{ modal: 'users.show', props: { userId: 1 } }">
     Open
 </button>
 ```
 
 ```html
 <button
-    x-on:click="$dispatch('modal-open', { component: 'users.show', props: { userId: 1 } })"
+    x-on:click="$dispatch('modal-open', { modal: 'users.show', props: { userId: 1 } })"
 >
     Open
 </button>
@@ -156,7 +156,7 @@ To open a modal, dispatch a `modal-open` event:
 
 ```js
 Livewire.dispatch("modal-open", {
-    component: "users.show",
+    modal: "users.show",
     props: { userId: 1 },
 });
 ```
@@ -167,7 +167,7 @@ To preload a modal, dispatch a `modal-preload` event with the same props used to
 
 ```js
 Livewire.dispatch("modal-preload", {
-    component: "users.show",
+    modal: "users.show",
     props: { userId: 1 },
 });
 ```
@@ -177,9 +177,7 @@ Livewire.dispatch("modal-preload", {
 Using the custom Alpine directive, you can preload a modal when the user starts hovering over a button. This improves UX by ensuring faster modal openings.
 
 ```html
-<button
-    x-modal:open.preload="{ component: 'users.show', props: { userId: 1 } }"
->
+<button x-modal:open.preload="{ modal: 'users.show', props: { userId: 1 } }">
     Preload and Open
 </button>
 ```

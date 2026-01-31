@@ -25,25 +25,25 @@
             <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card' }">
+                    x-modal:open="{ modal: 'card' }">
                     Open
                 </button>
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', props: { position: 'left' } }">
+                    x-modal:open="{ modal: 'card', props: { position: 'left' } }">
                     Open Left
                 </button>
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', props: { position: 'right' } }">
+                    x-modal:open="{ modal: 'card', props: { position: 'right' } }">
                     Open Right
                 </button>
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', props: { position: 'bottom' } }">
+                    x-modal:open="{ modal: 'card', props: { position: 'bottom' } }">
                     Open Bottom
                 </button>
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', props: { position: 'top' } }">
+                    x-modal:open="{ modal: 'card', props: { position: 'top' } }">
                     Open Top
                 </button>
 
@@ -57,7 +57,7 @@
             <div class="flex grow items-center justify-center border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open.preload="{ component: 'card' }">
+                    x-modal:open.preload="{ modal: 'card' }">
                     Open Preloaded Modal
                 </button>
 
@@ -71,25 +71,25 @@
             <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', stack: 'card', }">
+                    x-modal:open="{ modal: 'card', stack: 'card', }">
                     Open
                 </button>
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'left' } }">
+                    x-modal:open="{ modal: 'card', stack: 'card', props: { position: 'left' } }">
                     Open Left
                 </button>
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'right' } }">
+                    x-modal:open="{ modal: 'card', stack: 'card', props: { position: 'right' } }">
                     Open Right
                 </button>
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'bottom' } }">
+                    x-modal:open="{ modal: 'card', stack: 'card', props: { position: 'bottom' } }">
                     Open Bottom
                 </button>
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'card', stack: 'card', props: { position: 'top' } }">
+                    x-modal:open="{ modal: 'card', stack: 'card', props: { position: 'top' } }">
                     Open Top
                 </button>
 
@@ -103,15 +103,15 @@
             <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'slideover' }">
+                    x-modal:open="{ modal: 'slideover' }">
                     Open Slideover
                 </button>
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'slideover', props: { position: 'left' } }">
+                    x-modal:open="{ modal: 'slideover', props: { position: 'left' } }">
                     Open Left
                 </button>
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'slideover', props: { position: 'right' } }">
+                    x-modal:open="{ modal: 'slideover', props: { position: 'right' } }">
                     Open Right
                 </button>
 
@@ -125,12 +125,12 @@
             <div class="flex grow flex-wrap items-center justify-center gap-2 border-b">
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'slideover', stack: 'slideover'}">
+                    x-modal:open="{ modal: 'slideover', stack: 'slideover'}">
                     Open Stacked Slideover
                 </button>
 
                 <button type="button" class="rounded-md border px-3.5 py-1.5 shadow-sm focus:ring active:shadow-none"
-                    x-modal:open="{ component: 'slideover', props:{ position: 'left' }, stack: 'slideover-left' }">
+                    x-modal:open="{ modal: 'slideover', props:{ position: 'left' }, stack: 'slideover-left' }">
                     Open Left
                 </button>
 

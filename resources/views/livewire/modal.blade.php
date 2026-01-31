@@ -31,7 +31,7 @@
     },
     makeModalComponent(event) {
         return {
-            component: event.detail?.component ?? event.component ?? null,
+            component: event.detail?.modal ?? event.modal ?? event.detail?.component ?? event.component ?? null,
             props: event.detail?.props ?? event.props ?? [],
             params: event.detail?.params ?? event.params ?? [],
             stack: event.detail?.stack ?? event.stack ?? this.$wire.stack,
