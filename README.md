@@ -23,7 +23,7 @@ This package provides a single Livewire `Modal` component that should be placed 
 
 Modals can be opened and closed by dispatching `modal-open` and `modal-close` events.
 
-Any Livewire component can be used as a modal without requiring special interfaces or base components—just use your existing components as they are.
+For security, only components you explicitly allow can be opened in a modal (see [Allowing Components](#allowing-components)).
 
 ## Installation
 
@@ -64,9 +64,54 @@ Add the modal manager component `<livewire:modal />` at the end of your `body` t
 </body>
 ```
 
+### Allowing Components
+
+The list of opened modals is sent by the browser, so anyone can ask the modal manager to render any component with any props. To prevent this, the modal manager refuses (403) every component that has not been explicitly allowed.
+
+Allow a component by implementing the `ModalComponent` contract:
+
+```php
+use Elegantly\LivewireModal\Contracts\ModalComponent;
+use Livewire\Component;
+
+class ShowUser extends Component implements ModalComponent
+{
+    // ...
+}
+```
+
+To allow components you can't modify (from a vendor package for example), publish the config file and list them by name or class:
+
+```bash
+php artisan vendor:publish --tag="livewire-modal-config"
+```
+
+```php
+return [
+    'components' => [
+        'users.show',
+        \Vendor\Package\Livewire\Component::class,
+    ],
+];
+```
+
+Props must be passed by name (`{ userId: 1 }`); positional props (`[1]`) are refused.
+
+> [!WARNING]
+> Props come from the browser and must be treated as untrusted input, even on `#[Locked]` properties: they are assigned before `mount()` runs.
+> A component opened in a modal also does not run the middleware of its own route (`auth`, `can`, Filament's panel access, ...), only those of the page hosting `<livewire:modal />`.
+> Always authorize in `mount()` and in every action:
+>
+> ```php
+> public function mount(User $user): void
+> {
+>     $this->authorize('view', $user);
+> }
+> ```
+
 ### Preparing Your Modals
 
-Any Livewire component can be displayed as a modal. However, certain features, such as stacking, require additional customization.
+Any allowed Livewire component can be displayed as a modal. However, certain features, such as stacking, require additional customization.
 
 #### Creating a Simple Modal Component
 

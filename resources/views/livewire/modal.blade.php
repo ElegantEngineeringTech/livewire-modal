@@ -154,7 +154,7 @@
 
     @foreach ($components as ['id' => $id, 'component' => $component, 'props' => $props])
         <div x-data="{
-            get modalId() { return '{{ $id }}'; },
+            get modalId() { return {{ Js::from($id) }}; },
             get isModalActive() { return modalActiveId === this.modalId; },
             get modal() { return findModalById(this.modalId); },
             get modalIndex() { return findModalHistoryIndex(this.modalId); },

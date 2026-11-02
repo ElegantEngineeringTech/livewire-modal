@@ -21,6 +21,7 @@ class LivewireModalServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('livewire-modal')
+            ->hasConfigFile()
             ->hasViews();
     }
 
