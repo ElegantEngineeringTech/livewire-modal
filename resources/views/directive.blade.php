@@ -7,12 +7,22 @@
         }, {
             Alpine,
             effect,
-            evaluate,
+            evaluateLater,
             cleanup
         }) => {
             let prevent = modifiers && modifiers.includes('prevent');
             let stop = modifiers && modifiers.includes('stop');
-            let params = expression && evaluate(expression);
+            let params;
+
+            if (expression) {
+                let getParams = evaluateLater(expression);
+
+                effect(() => {
+                    getParams(result => {
+                        params = result;
+                    });
+                });
+            }
 
             if (value === 'open') {
                 let preload = modifiers && modifiers.includes('preload');
@@ -39,9 +49,13 @@
                 }
 
                 cleanup(() => {
-                    el.removeEventListener('click', onClick);
+                    el.removeEventListener('click', onClick, {
+                        capture: true
+                    });
                     if (preload) {
-                        el.removeEventListener('mouseenter', onMouseenter);
+                        el.removeEventListener('mouseenter', onMouseenter, {
+                            capture: true
+                        });
                     }
                 });
 
@@ -58,7 +72,9 @@
                 });
 
                 cleanup(() => {
-                    el.removeEventListener('click', onClick);
+                    el.removeEventListener('click', onClick, {
+                        capture: true
+                    });
                 });
             } else if (value === 'close-all') {
                 let onClick = e => {
@@ -73,7 +89,9 @@
                 });
 
                 cleanup(() => {
-                    el.removeEventListener('click', onClick);
+                    el.removeEventListener('click', onClick, {
+                        capture: true
+                    });
                 });
             }
 
