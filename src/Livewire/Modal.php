@@ -43,6 +43,7 @@ class Modal extends Component
             }
         }
 
+        // @phpstan-ignore-next-line
         return view('livewire-modal::livewire.modal');
     }
 
