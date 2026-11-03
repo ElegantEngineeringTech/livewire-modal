@@ -259,6 +259,26 @@ To close all modals at once:
 Livewire.dispatch("modal-close-all");
 ```
 
+### Directive Modifiers
+
+The `x-modal` directive listens for clicks like Alpine's `x-on:click`. Its params are evaluated on each click, so they always use the current values, and `$event` is available:
+
+```html
+<button x-modal:open="{ modal: 'wallets.topup', props: { currency: $wire.currency } }">
+    Top up
+</button>
+```
+
+It supports the `x-on` modifiers that make sense for a modal:
+
+| Modifier                    | Effect                                                         |
+| --------------------------- | -------------------------------------------------------------- |
+| `.prevent`                  | Calls `$event.preventDefault()`                                |
+| `.stop`                     | Calls `$event.stopPropagation()`                               |
+| `.self`                     | Only runs when the element itself is clicked                   |
+| `.throttle`                 | Ignores repeated clicks for 250ms, or `.throttle.500ms`        |
+| `.preload` (`x-modal:open`) | Preloads the modal on hover, or after a delay `.preload.150ms` |
+
 ## Testing
 
 Run the test suite with:

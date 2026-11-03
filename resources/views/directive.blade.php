@@ -1,100 +1,69 @@
 <script wire:ignore>
     document.addEventListener('alpine:init', () => {
-        Alpine.directive('modal', (el, {
+        const events = {
+            'open': 'modal-open',
+            'close': 'modal-close',
+            'close-all': 'modal-close-all',
+        };
+
+        // x-on modifiers forwarded to the click listener, the others don't make sense on a modal
+        const clickModifiers = ['prevent', 'stop', 'self', 'throttle'];
+
+        const isWait = modifier => /^\d+(ms)?$/.test(modifier);
+
+        Alpine.directive('modal', Alpine.skipDuringClone((el, {
             value,
             modifiers,
             expression
         }, {
-            Alpine,
-            effect,
             evaluateLater,
             cleanup
         }) => {
-            let prevent = modifiers && modifiers.includes('prevent');
-            let stop = modifiers && modifiers.includes('stop');
-            let params;
-
-            if (expression) {
-                let getParams = evaluateLater(expression);
-
-                effect(() => {
-                    getParams(result => {
-                        params = result;
-                    });
-                });
+            if (!events[value]) {
+                return;
             }
 
-            if (value === 'open') {
-                let preload = modifiers && modifiers.includes('preload');
+            // Like x-on, the params are evaluated when the event fires, so they are always current
+            let getParams = expression ? evaluateLater(expression) : callback => callback();
 
-                let onClick = e => {
-                    prevent && e.preventDefault();
-                    stop && e.stopImmediatePropagation();
+            let dispatch = (name, e) => getParams(params => {
+                Livewire.dispatch(name, params);
+            }, {
+                scope: {
+                    '$event': e
+                },
+                params: [e]
+            });
 
-                    Livewire.dispatch('modal-open', params);
-                };
+            // x-on would take unknown modifiers such as `preload` for keys, and never fire on a click
+            let forwarded = modifiers.filter((modifier, index) => {
+                return clickModifiers.includes(modifier) || (modifiers[index - 1] === 'throttle' && isWait(modifier));
+            });
+
+            cleanup(Alpine.bind(el, {
+                [[Alpine.prefixed('on:click'), ...forwarded].join('.')]: e => dispatch(events[value], e),
+            }));
+
+            if (value === 'open' && modifiers.includes('preload')) {
+                let wait = modifiers[modifiers.indexOf('preload') + 1];
+                let delay = isWait(wait) ? parseInt(wait) : 0;
+                let timeout;
 
                 let onMouseenter = e => {
-                    Livewire.dispatch('modal-preload', params);
+                    timeout = setTimeout(() => dispatch('modal-preload', e), delay);
                 };
 
-                el.addEventListener('click', onClick, {
-                    capture: true
-                });
+                let onMouseleave = () => clearTimeout(timeout);
 
-                if (preload) {
-                    el.addEventListener('mouseenter', onMouseenter, {
-                        capture: true
-                    });
-                }
+                el.addEventListener('mouseenter', onMouseenter);
+                el.addEventListener('mouseleave', onMouseleave);
 
                 cleanup(() => {
-                    el.removeEventListener('click', onClick, {
-                        capture: true
-                    });
-                    if (preload) {
-                        el.removeEventListener('mouseenter', onMouseenter, {
-                            capture: true
-                        });
-                    }
-                });
-
-            } else if (value === 'close') {
-                let onClick = e => {
-                    prevent && e.preventDefault();
-                    stop && e.stopImmediatePropagation();
-
-                    Livewire.dispatch('modal-close', params);
-                };
-
-                el.addEventListener('click', onClick, {
-                    capture: true
-                });
-
-                cleanup(() => {
-                    el.removeEventListener('click', onClick, {
-                        capture: true
-                    });
-                });
-            } else if (value === 'close-all') {
-                let onClick = e => {
-                    prevent && e.preventDefault();
-                    stop && e.stopImmediatePropagation();
-
-                    Livewire.dispatch('modal-close-all', params);
-                };
-
-                el.addEventListener('click', onClick, {
-                    capture: true
-                });
-
-                cleanup(() => {
-                    el.removeEventListener('click', onClick, {
-                        capture: true
-                    });
+                    clearTimeout(timeout);
+                    el.removeEventListener('mouseenter', onMouseenter);
+                    el.removeEventListener('mouseleave', onMouseleave);
                 });
             }
-
-        });
+        }));
     });
 </script>

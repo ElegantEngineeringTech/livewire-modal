@@ -2,6 +2,24 @@
 
 All notable changes to `livewire-modal` will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- The `x-modal` directive now follows Alpine's `x-on:click`. Its params are evaluated on each click instead of once on load, so values such as `$wire.currency` are always current, and `$event` is available.
+- **Breaking:** `x-modal` no longer listens during the capture phase, so `@click` handlers on the element and its children now run first.
+- **Breaking:** `.stop` now calls `stopPropagation()` instead of `stopImmediatePropagation()`, like `x-on`.
+
+### Added
+
+- `.self` and `.throttle` (`.throttle.500ms`) modifiers on the `x-modal` directive.
+- Hover delay for `.preload` (`x-modal:open.preload.150ms`). The preload is cancelled if the pointer leaves first.
+
+### Fixed
+
+- `x-modal` click listeners are now removed when the element is destroyed.
+- `x-modal` is skipped while Alpine clones elements during a Livewire morph.
+
 ## v3.0.0 - 2026-11-02
 
 Security release. All users should upgrade.
